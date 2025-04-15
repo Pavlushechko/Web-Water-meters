@@ -1,0 +1,32 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}
+Water Meters
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <main>
+        <h2>Список подключённых квартир</h2>
+
+        <!-- Форма поиска -->
+        <form method="GET" action="{% url 'service_list' %}" class="list-search-form">
+            <input type="text" name="search" placeholder="Поиск по городу, улице, дому, квартире" value="{{ request.GET.search }}">
+            <button type="submit">Искать</button>
+        </form>
+
+        <div class="card-list">
+            {% for service in services %}
+                <a href="{% url 'service_detail' service.id %}" class="card-link">
+                    <div class="card">
+                        <img src="{{ service.image }}" alt="Фото дома">
+                        <h3>{{ service.city }}, ул. {{ service.street }}, д. {{ service.house }}, кв. {{ service.apartment }}</h3>
+                    </div>
+                </a>
+            {% empty %}
+                <p>Нет доступных квартир.</p>
+            {% endfor %}
+        </div>
+    </main>
+</div>
+{% endblock %}
