@@ -1,0 +1,59 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}
+Water Meters
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    
+    <main>
+        <h2>Передача показаний счётчиков</h2>
+        <p>Показания принимаются с 1 по <strong>20</strong> число месяца. Передать также можно по телефону: <strong>+79134981325</strong></p>
+        
+        <form method="GET" action="{% url 'service_detail' %}">
+            <div class="form-group">
+                <label for="city">Город</label>
+                <select id="city" name="city">
+                    <option>Выберите город</option>
+                </select>
+            </div>
+        
+            <div class="form-group">
+                <label for="street">Улица</label>
+                <select id="street" name="street">
+                    <option>Выберите улицу</option>
+                </select>
+            </div>
+        
+            <div class="form-group">
+                <label for="house">№ Дома</label>
+                <input type="text" id="house" name="house">
+            </div>
+        
+            <div class="form-group">
+                <label for="apartment">№ Квартиры</label>
+                <input type="text" id="apartment" name="apartment">
+            </div>
+        
+            <div class="form-group checkbox-group">
+                <input type="checkbox" id="private-house" name="private_house">
+                <label for="private-house">Частный дом</label>
+            </div>
+        
+            <div class="form-group">
+                <label for="fullname">ФИО</label>
+                <input type="text" id="fullname" name="fullname">
+            </div>
+        
+            <div class="form-group">
+                <label for="phone">Номер телефона</label>
+                <input type="text" id="phone" name="phone">
+            </div>
+        
+            <button type="submit">Перейти к показаниям</button>
+        </form>        
+        
+    </main>
+</div>
+{% endblock %}

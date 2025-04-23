@@ -1,0 +1,36 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+
+{% block title %}
+Water Meters
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <button class="back-button" onclick="window.history.back();">Назад</button>
+    <h2>Подтверждение данных</h2>
+    <p><strong>Город:</strong> {{ city }}</p>
+    <p><strong>Улица:</strong> {{ street }}</p>
+    <p><strong>№ Дома:</strong> {{ house }}</p>
+    <p><strong>№ Квартиры:</strong> {{ apartment }}</p>
+    <p><strong>Частный дом:</strong> {{ private_house }}</p>
+    <p><strong>ФИО:</strong> {{ fullname }}</p>
+    <p><strong>Номер телефона:</strong> {{ phone }}</p>
+
+    <p class="instruction">Напишите только первые 5 цифр до запятой</p>
+
+    <div class="form">
+        <label for="cold">ХВС 1</label>
+        <input type="text" id="cold" placeholder="Предыдущие значения">
+
+        <label for="hot">ГВС 1</label>
+        <input type="text" id="hot" value="00058">
+
+        <button type="button">+</button>
+    </div>
+
+    <button class="submit">Отправить</button>
+</div>
+{% endblock %}
+
+{% comment %} <button type="button">+</button> {% endcomment %}
