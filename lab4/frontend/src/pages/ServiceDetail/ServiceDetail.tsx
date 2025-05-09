@@ -2,16 +2,16 @@ import { useParams, Link } from 'react-router-dom';
 import styles from './ServiceDetail.module.css';
 import { ServiceDetailHook } from './ServiceDetailHook'; 
 
-type User = {
-  first_name: string;
-  last_name: string;
-  patronymic?: string | null;
+type UserProfile = {
+  middle_name: string;
 };
 
 type Owner = {
+  id: number;
   first_name: string;
   last_name: string;
-  patronymic?: string | null;
+  email: string;
+  profile: UserProfile;
 };
 
 export type Service = {
@@ -21,6 +21,8 @@ export type Service = {
   house: string;
   apartment: string;
   image: string;
+  gvs?: string;
+  hvs?: string;
   owners: Owner[];
 };
 
@@ -37,32 +39,38 @@ export function ServiceDetail() {
     );
   }
 
-
   if (!service) {
     return <div className={`${styles.card} ${styles.errorText}`}>Квартира не найдена</div>;
   }
 
-  console.log(service.owners)
   const owners = service.owners
-    .map((o) => {
-      const { first_name, last_name, patronymic } = o;
-      return `${first_name} ${last_name}${patronymic ? ` ${patronymic}` : ''}`;
+    .map((owner) => {
+      const { first_name, last_name, profile } = owner;
+      return `${last_name} ${first_name}${profile.middle_name ? ` ${profile.middle_name}` : ''}`;
     })
     .join(', ') || 'Нет хозяев';
-
 
   return (
     <div className={styles.card}>
       <p className={styles.pathway}>/services/{id}</p>
       <h2 className={styles.title}>Информация о квартире</h2>
       <div className={styles.imageBlock}>
-        <img className={styles.image} src={service.image} alt="Фото дома" />
+        <img 
+          className={styles.image} 
+          src={service.image} 
+          alt="Фото дома" 
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = '/path/to/default-image.jpg';
+          }}
+        />
       </div>
       <div className={styles.info}>
         <p><strong>Город:</strong> {service.city}</p>
         <p><strong>Улица:</strong> {service.street}</p>
         <p><strong>Дом:</strong> {service.house}</p>
         <p><strong>Квартира:</strong> {service.apartment}</p>
+        {service.gvs && <p><strong>ГВС:</strong> {service.gvs}</p>}
+        {service.hvs && <p><strong>ХВС:</strong> {service.hvs}</p>}
         <p className={styles.ownerText}><strong>Хозяева:</strong> {owners}</p>
       </div>
 

@@ -1,11 +1,16 @@
 import styles from "./ServiceCard.module.css";
 import { Link } from 'react-router-dom';
 
+type UserProfile = {
+  middle_name: string;
+};
+
 type User = {
+  id: number;
   first_name: string;
   last_name: string;
-  patronymic?: string | null;
-  email: string;  // Добавлен email для полноты информации владельца
+  email: string;
+  profile: UserProfile;
 };
 
 type Service = {
@@ -15,7 +20,9 @@ type Service = {
   street: string;
   house: string;
   apartment: string;
-  owners: User[];  // Используем owners вместо ownerships
+  gvs?: string;
+  hvs?: string;
+  owners: User[];
 };
 
 type Props = {
@@ -27,9 +34,9 @@ export function ServiceCard({ service }: Props) {
   
   const owners = service.owners.length > 0
     ? service.owners
-        .map((o) => {
-          const { first_name, last_name, patronymic } = o;
-          return `${first_name} ${last_name}${patronymic ? ' ' + patronymic : ''}`;
+        .map((owner) => {
+          const { first_name, last_name, profile } = owner;
+          return `${last_name} ${first_name}${profile.middle_name ? ' ' + profile.middle_name : ''}`;
         })
         .join(', ')
     : 'Нет хозяев';

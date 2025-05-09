@@ -1,13 +1,21 @@
 from rest_framework import serializers
-from .models import Service, Application, ApplicationService, User, Ownership
+from .models import Service, Application, ApplicationService, User, Ownership, UserProfile
+from django.contrib.auth.models import User
+
 
 
 # Пользователь
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ['middle_name']  # Используем middle_name вместо patronymic
+
 class UserSerializer(serializers.ModelSerializer):
+    profile = UserProfileSerializer()
+    
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'patronymic', 'email']
-
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'profile']
 
 # Владелец услуги (ownership)
 class OwnershipSerializer(serializers.ModelSerializer):
