@@ -1,0 +1,35 @@
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    text-align: left;
+}
+
+.searchForm {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.searchForm input[type="text"] {
+    padding: 6px 10px;
+    font-size: 16px;
+}
+
+.searchForm button {
+    margin-left: 10px;
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+    min-width: 120px;
+}
+
+.cardList {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}

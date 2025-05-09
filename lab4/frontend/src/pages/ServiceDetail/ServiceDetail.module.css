@@ -1,0 +1,152 @@
+/* Основной контейнер */
+.card {
+    max-width: 700px;
+    margin: 50px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Заголовок страницы */
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  /* Путь (показ URL) */
+  .pathway {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 20px;
+  }
+  
+  /* Блок с изображением */
+.imageBlock {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.imageBlock img {
+  height: 100%;
+  width: auto;
+  border-radius: 10px;
+}
+
+  
+  /* Стили для текста */
+  p {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  strong {
+    font-weight: bold;
+  }
+  
+  /* Блок с информацией */
+  .card .info {
+    margin-top: 20px;
+  }
+  
+  /* Стиль для кнопки "Назад" */
+  .detailBackButton {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 8px 12px;
+    font-size: 14px;
+    background-color: #6c757d;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+  }
+  
+  .detailBackButton:hover {
+    background-color: #5a6268;
+  }
+  
+  /* Стили для текста о владельцах */
+  .card p.ownerText {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 15px;
+  }
+  
+  /* Кнопка "Квартира не найдена" */
+  .card p.errorText {
+    font-size: 18px;
+    color: #d9534f;
+    text-align: center;
+  }
+  
+  .detailFields {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .detailInput {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+  }
+  
+  /* Убираем стрелки в Chrome, Safari, Edge */
+  .detailInput::-webkit-outer-spin-button,
+  .detailInput::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+  }
+  
+  .detailSubmitButton {
+    background-color: #007BFF;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .detailSubmitButton:hover {
+    background-color: #0056b3;
+  }
+
+  .detailAddButton {
+    background-color: #28a745;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .detailAddButton:hover {
+    background-color: #218838;
+  }
+  
+  .detailGvsInput,
+  .detailHvsInput {
+    border: 1px solid #007bff;
+    background-color: #f1f9ff;
+  }
+  
+  .redExcl {
+    color: red;
+    font-size: 20px;
+    font-weight: bold;
+  }

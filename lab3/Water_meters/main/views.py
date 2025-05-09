@@ -1,34 +1,49 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.conf import settings
-from django.conf.urls.static import static
-from django.shortcuts import render 
-from .models import Service, Application 
-from django.db.models import Q
+from rest_framework import viewsets, status
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 
-def service_list(request): 
-    search_query = request.GET.get('search', '')
-    services = Service.objects.filter(status='active')
-    if search_query:
-        services = services.filter(
-            Q(city__icontains=search_query) |
-            Q(street__icontains=search_query) |
-            Q(house__icontains=search_query) |
-            Q(apartment__icontains=search_query)
-        )
-    return render(request, 'main/service_list.html', {'services': services})
+from .models import Service, Application, ApplicationService, Ownership, User
+from .serializers import (
+    ServiceSerializer,
+    ServiceCreateSerializer,
+    ApplicationSerializer,
+    ApplicationServiceSerializer,
+    OwnershipSerializer 
+)
 
-def main_page(request):
-    return render(request, 'main/main_page.html')
 
-def check(request):
-    return HttpResponse("<h4> ПРОВЕРКА связи </h4>")
+# Услуги (Service)
+class ServiceViewSet(viewsets.ModelViewSet):
+    queryset = Service.objects.all()
 
-def service_detail(request, service_id):
-    service = get_object_or_404(Service, id=service_id)
-    return render(request, "main/service_detail.html", {"service": service})
+    def get_serializer_class(self):
+        if self.request.method in ['POST', 'PUT', 'PATCH']:
+            return ServiceCreateSerializer
+        return ServiceSerializer
 
-def applications(request):
-    applications = Application.objects.all()
-    return render(request, "main/applications.html", {"show_services": "applications", "applications": applications})
+    def perform_create(self, serializer):
+        service = serializer.save()
+        # владельцы уже добавлены в ServiceCreateSerializer.create()
+        return service
+
+
+# Заявки (Application)
+class ApplicationViewSet(viewsets.ModelViewSet):
+    queryset = Application.objects.all()
+    serializer_class = ApplicationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(creator=self.request.user)
+
+
+# Связь Заявка - Услуга
+class ApplicationServiceViewSet(viewsets.ModelViewSet):
+    queryset = ApplicationService.objects.all()
+    serializer_class = ApplicationServiceSerializer
+
+
+class OwnershipViewSet(viewsets.ModelViewSet): 
+    queryset = Ownership.objects.all() 
+    serializer_class = OwnershipSerializer 

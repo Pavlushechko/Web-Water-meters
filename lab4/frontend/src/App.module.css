@@ -1,0 +1,247 @@
+.logo {
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  display: block;
+}
+
+.container {
+  max-width: 600px;
+  margin: 50px auto;
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+  display: flex; /* Используем Flexbox */
+  align-items: center; /* Выравнивание по вертикали */
+  justify-content: space-between; /* Местоположение элементов справа и слева */
+  text-align: left;
+}
+
+.container h1,
+.container .tagline,
+.container .supportInfo {
+  margin: 0;
+  flex-grow: 1; /* Заставляем элементы занимать оставшееся пространство */
+}
+
+.container .supportInfo {
+  margin-top: 10px;
+}
+
+header {
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+button {
+  background-color: navy;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+button:hover {
+  background-color: darkblue;
+}
+
+.list-search-form {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* ← расстояние между input и button */
+  margin-bottom: 20px;
+}
+
+.list-search-form input[type="text"] {
+  padding: 6px 10px;
+  font-size: 16px;
+  margin-right: 15px; /* ← добавляем отступ справа */
+}
+
+.list-search-form button {
+  margin-left: 10px;
+  padding: 10px 20px; /* увеличенный внутренний отступ */
+  font-size: 18px;     /* увеличенный размер текста */
+  cursor: pointer;
+  min-width: 120px;    /* опционально: минимальная ширина */
+}
+
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.checkbox-group input {
+  margin-right: 10px;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+}
+.checkbox-container label {
+  margin-left: 10px;
+}
+
+.card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  background-color: #f8f8f8;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: scale(1.02);
+  background-color: #e0f0ff;
+}
+
+.card img {
+  width: 120px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-right: 15px;
+}
+
+
+.button-back {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.button-back:hover {
+  background-color: #0056b3;
+}
+
+
+.detail-img {
+  width: 300px;         /* ширина карточки */
+  height: 200px;        /* высота карточки */
+  overflow: hidden;     /* обрезаем, если изображение больше */
+  border-radius: 10px;  /* скругление углов по желанию */
+}
+
+.detail-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;    /* чтобы картинка заполнила блок без искажения пропорций */
+}
+
+
+.detail-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.detail-input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+/* Убираем стрелки в Chrome, Safari, Edge */
+.detail-input::-webkit-outer-spin-button,
+.detail-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.detail-submit-button {
+  background-color: #007BFF;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.detail-submit-button:hover {
+  background-color: #0056b3;
+}
+
+.detail-back-button {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 8px 12px;
+  font-size: 14px;
+  background-color: #6c757d;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+}
+
+.detail-back-button:hover {
+  background-color: #5a6268;
+}
+
+.buttonContainer {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.navButton {
+  background-color: #f0f0f0;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  min-width: 100px; /* одинаковая ширина */
+  text-align: center;
+}
+
+.navButton:hover {
+  background-color: #e0e0e0;
+}

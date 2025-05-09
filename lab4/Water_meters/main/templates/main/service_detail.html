@@ -1,0 +1,48 @@
+{% extends "main/layout.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h2>Информация о квартире</h2>
+    {% if service %}
+        <div>
+            <div class="detail-img">
+                <img src="{{ service.image }}" alt="Фото дома">
+            </div>
+            <p><strong>Город:</strong> {{ service.city }}</p>
+            <p><strong>Улица:</strong> {{ service.street }}</p>
+            <p><strong>Дом:</strong> {{ service.house }}</p>
+            <p><strong>Квартира:</strong> {{ service.apartment }}</p>
+            <p><strong>Хозяева:</strong>
+                {% with owners=service.ownership_set.all %}
+                    {% for ownership in owners %}
+                        {{ ownership.user.first_name }} {{ ownership.user.last_name }}{% if ownership.user.patronymic %} {{ ownership.user.patronymic }}{% endif %}{% if not forloop.last %}, {% endif %}
+                    {% empty %}
+                        Нет хозяев
+                    {% endfor %}
+                {% endwith %}
+            </p>       
+        </div>
+    {% else %}
+        <p>Квартира не найдена.</p>
+    {% endif %}
+    <br>
+    <form method="post" action="#">
+        {% csrf_token %}
+        <div class="detail-fields">
+            <label>ГВС1</label>
+            <input type="number" name="gvs" class="detail-input detail-gvs-input" placeholder="Введите значение ГВС1">
+
+            <label>ХВС1</label>
+            <input type="number" name="hvs" class="detail-input detail-hvs-input" placeholder="Введите значение ХВС1">
+
+            <button type="button" class="detail-add-button">Добавить ГВС</button>
+            <button type="button" class="detail-add-button">Добавить ХВС</button>
+
+            <button type="submit" class="detail-submit-button">Отправить заявку</button>
+        </div>
+    </form>
+    <br>
+    <a href="{% url 'service_list' %}" class="detail-back-button">← Назад</a>
+</div>
+{% endblock %}

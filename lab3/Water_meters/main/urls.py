@@ -1,16 +1,12 @@
-from django.urls import path
-from . import views
-from django.conf import settings
-from django.conf.urls.static import static
-from django.contrib import admin
+from django.urls import path, include 
+from rest_framework.routers import DefaultRouter
 
+from .views import ( ServiceViewSet, ApplicationViewSet, ApplicationServiceViewSet, OwnershipViewSet )
 
-urlpatterns = [
-    path('', views.service_list, name='service_list'),
-    path('admin/', admin.site.urls),  
-    path('service_detail/<int:service_id>/', views.service_detail, name='service_detail'),
-    path('applications/', views.applications, name='applications')
-] 
-if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+router = DefaultRouter() 
+router.register(r'services', ServiceViewSet, basename='service') 
+router.register(r'applications', ApplicationViewSet, basename='application') 
+router.register(r'application-services', ApplicationServiceViewSet, basename='applicationservice')
+router.register(r'ownerships', OwnershipViewSet)
 
+urlpatterns = [ path('', include(router.urls)), ]
