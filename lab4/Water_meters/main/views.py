@@ -2,6 +2,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
+from rest_framework.pagination import PageNumberPagination
 
 from .models import Service, Application, ApplicationService, Ownership
 from .serializers import (
@@ -13,13 +15,30 @@ from .serializers import (
 )
 
 # Услуги (Service)
+
+
 class ServiceAPIView(APIView):
-    
     def get(self, request):
-        services = Service.objects.all()
-        serializer = ServiceSerializer(services, many=True)
-        return Response(serializer.data)
-    
+        search_query = request.query_params.get('search', '')
+        services = Service.objects.all().order_by('city', 'street', 'house', 'apartment')
+        
+        if search_query:
+            keywords = search_query.strip().split()
+            for keyword in keywords:
+                services = services.filter(
+                    Q(city__icontains=keyword) |
+                    Q(street__icontains=keyword) |
+                    Q(house__icontains=keyword) |
+                    Q(apartment__icontains=keyword)
+                ).order_by('city', 'street')  # повторно применяем сортировку после фильтрации
+
+        paginator = PageNumberPagination()
+        paginator.page_size = 2
+        result_page = paginator.paginate_queryset(services, request)
+        
+        serializer = ServiceSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
+
     def post(self, request):
         serializer = ServiceCreateSerializer(data=request.data)
         if serializer.is_valid():

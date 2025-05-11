@@ -23,51 +23,58 @@ export type Service = {
   ownerships: Ownership[];
 };
 
-type Props = {
-  services: Service[];
-};
-
 export function ServiceList() {
-  const [inputValue, setInputValue] = useState('');
-  const [search, setSearch] = useState('');
-  const { services} = ServiceListHook();  
+    const [inputValue, setInputValue] = useState('');
+    const [search, setSearch] = useState('');
+    const { services, loadMore, hasMore, isLoading, error } = ServiceListHook(search);
     
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSearch(inputValue.trim());
-  };
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        setSearch(inputValue.trim());
+    };
 
-  const filtered = services.filter(service =>
-    `${service.city} ${service.street} ${service.house} ${service.apartment}`
-      .toLowerCase()
-      .includes(search.toLowerCase())
-  );
+    if (error) return <div>Ошибка: {error.message}</div>;
 
-  return (
-    <div className={styles.container}>
-      <main>
-        <h2>Список подключённых квартир</h2>
+    return (
+        <div className={styles.container}>
+            <main>
+                <h2>Список подключённых квартир</h2>
 
-        <form className={styles.searchForm} onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="Поиск по городу, улице, дому, квартире"
-            value={inputValue}
-            onChange={e => setInputValue(e.target.value)}
-          />
-          <button type="submit">Искать</button>
-        </form>
+                <form onSubmit={handleSubmit} className={styles.searchForm}>
+                    <input
+                        type="text"
+                        placeholder="Поиск по городу, улице, дому, квартире"
+                        value={inputValue}
+                        onChange={e => setInputValue(e.target.value)}
+                    />
+                    <button type="submit">Искать</button>
+                </form>
 
-        {filtered.length > 0 ? (
-          <div className={styles.cardList}>
-            {filtered.map(service => (
-              <ServiceCard key={service.id} service={service} />
-            ))}
-          </div>
-        ) : (
-          <p>Нет доступных квартир.</p>
-        )}
-      </main>
-    </div>
-  );
+                {services.length > 0 ? (
+                    <>
+                        <div className={styles.cardList}>
+                            {services.map(service => (
+                                <ServiceCard 
+                                    key={`${service.id}-${service.city}`}
+                                    service={service} 
+                                />
+                            ))}
+                        </div>
+                        
+                        {hasMore && (
+                            <button 
+                                onClick={loadMore}
+                                disabled={isLoading}
+                                className={styles.loadMoreButton}
+                            >
+                                {isLoading ? 'Загрузка...' : 'Загрузить ещё'}
+                            </button>
+                        )}
+                    </>
+                ) : (
+                    <p>Нет доступных квартир.</p>
+                )}
+            </main>
+        </div>
+    );
 }
