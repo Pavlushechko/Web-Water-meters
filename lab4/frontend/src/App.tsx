@@ -4,63 +4,15 @@ import { ServiceList } from './pages/ServiceList/ServiceList';
 import { ServiceCard } from './pages/ServiceCard/ServiceCard';
 import { ServiceDetail } from './pages/ServiceDetail/ServiceDetail';
 import { Applications } from './pages/Applications/Applications';
+import { ApplicationDetail } from './pages/ApplicationDetail/ApplicationDetail';
 
-const services = [
-  {
-    id: 1,
-    city: "Москва",
-    street: "Тверская",
-    house: "12",
-    apartment: "34",
-    image: "https://storage.yandexcloud.net/storage.ardera-static.ru/products/891/normal_aba554ff68c7da31.jpg",
-    ownerships: [
-      {
-        user: {
-          first_name: "Иван",
-          last_name: "Иванов",
-          patronymic: "Петрович",
-        },
-      },
-    ],
-  },
-  {
-    id: 2,
-    city: "Санкт-Петербург",
-    street: "Невский проспект",
-    house: "7",
-    apartment: "56",
-    image: "https://via.placeholder.com/120x80",
-    ownerships: [],
-  },
-];
-
-const applications = [
-  {
-    id: 1,
-    status: "В обработке",
-    created_at: "2025-05-01T10:00:00Z",
-    completion_date: null,
-  },
-  {
-    id: 2,
-    status: "Завершена",
-    created_at: "2025-04-20T14:30:00Z",
-    completion_date: "2025-04-25T09:15:00Z",
-  },
-  {
-    id: 3,
-    status: "Отклонена",
-    created_at: "2025-03-15T08:00:00Z",
-    completion_date: "2025-03-16T17:45:00Z",
-  },
-];
 
 const App = () => {
   const location = useLocation();
 
   return (
     <>
-      <div className={styles.container}>
+      <nav className={styles.container}>
         <div>
           <h1>Water Meters</h1>
           <p className={styles.tagline}>установка - передача счётчиков</p>
@@ -89,7 +41,8 @@ const App = () => {
             </Link>
           )}
         </div>
-      </div>
+        
+      </nav>
 
       <Routes>
           <Route path="/services">
@@ -98,8 +51,9 @@ const App = () => {
           </Route>
           <Route
             path="/applications"
-            element={<Applications applications={applications} />}
+            element={<Applications  />}
           />
+          <Route path="/applications/:id" element={<ApplicationDetail />} />
       </Routes>
     </>
   );

@@ -56,14 +56,23 @@ class Application(models.Model):
 
 
 class ApplicationService(models.Model): 
-    application = models.ForeignKey(Application, on_delete=models.CASCADE, related_name='application_services') 
-    service = models.ForeignKey(Service, on_delete=models.CASCADE)
+    application = models.ForeignKey(
+        'Application',
+        on_delete=models.CASCADE,
+        related_name='application_services'
+    )
+    service = models.ForeignKey(
+        'Service',
+        on_delete=models.CASCADE
+    )
+    gvs = models.IntegerField(null=True, blank=True)
+    hvs = models.IntegerField(null=True, blank=True)
 
     class Meta:
         unique_together = ('application', 'service')
 
     def __str__(self):
-        return f"Заявка #{self.application.pk} → {self.service}"
+        return f"Заявка #{self.application.pk} → {self.service} (ГВС: {self.gvs}, ХВС: {self.hvs})"
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')

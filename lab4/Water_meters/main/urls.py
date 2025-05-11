@@ -15,5 +15,6 @@ urlpatterns = [
     path('api/services/<int:pk>/', views.ServiceDetailAPIView.as_view(), name='service-detail'),
     path('api/applications/', views.ApplicationAPIView.as_view(), name='application-list'),
     path('api/application-services/', views.ApplicationServiceAPIView.as_view(), name='application-services-list'),
+    path('api/applications/<int:pk>/', views.ApplicationDetailAPIView.as_view()),
     path('api/ownerships/', views.OwnershipAPIView.as_view(), name='ownership-list')
 ]

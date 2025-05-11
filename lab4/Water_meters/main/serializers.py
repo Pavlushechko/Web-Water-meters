@@ -32,11 +32,22 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Service
-        fields = ['id', 'city', 'street', 'house', 'apartment', 'image', 'status', 'owners', 'gvs', 'hvs']
+        fields = ['id', 'city', 'street', 'house', 'apartment', 'image', 'gvs', 'hvs', 'owners']
 
     def get_owners(self, obj):
-        ownerships = Ownership.objects.filter(service=obj)
-        return UserSerializer([o.user for o in ownerships], many=True).data
+        owners = Ownership.objects.filter(service=obj).select_related('user__profile')
+        return [
+            {
+                'id': o.user.id,
+                'first_name': o.user.first_name,
+                'last_name': o.user.last_name,
+                'email': o.user.email,
+                'profile': {
+                    'middle_name': o.user.profile.middle_name
+                }
+            }
+            for o in owners
+        ]
 
 
 # Добавление услуги — отдельно, чтобы позволить указывать владельцев по id
@@ -70,15 +81,27 @@ class ApplicationServiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ApplicationService
-        fields = ['id', 'application', 'service', 'service_id']
+        fields = ['id', 'application', 'service', 'service_id', 'gvs', 'hvs']
 
 
 # Заявка
 class ApplicationSerializer(serializers.ModelSerializer):
+    # Это поле будет только для чтения, и оно будет показывать связанные услуги
     application_services = ApplicationServiceSerializer(many=True, read_only=True)
-    creator = UserSerializer(read_only=True)
-    moderator = UserSerializer(read_only=True)
 
     class Meta:
         model = Application
         fields = ['id', 'status', 'created_at', 'form_date', 'completion_date', 'creator', 'moderator', 'application_services']
+
+    def __init__(self, *args, **kwargs):
+        # Если мы создаем заявку, не включаем поле application_services
+        if kwargs.get('context') and kwargs['context'].get('request') and kwargs['context']['request'].method == 'POST':
+            self.fields.pop('application_services', None)  # Исключаем поле для POST-запросов
+        super().__init__(*args, **kwargs)
+
+
+# serializers.py
+class ApplicationCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Application
+        fields = ['id', 'status', 'created_at', 'form_date', 'completion_date']

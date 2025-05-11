@@ -1,22 +1,20 @@
 import styles from './Applications.module.css';
+import { useApplications } from './ApplicationsHook';
+import { useNavigate } from 'react-router-dom';
 
-type Application = {
-  id: number | string;
-  status: string;
-  created_at: string | Date;
-  completion_date?: string | Date | null;
-};
 
-type ApplicationsProps = {
-  applications: Application[];
-};
+export function Applications() {
+  const { applications, loading, error } = useApplications();
+  const navigate = useNavigate();
 
-export function Applications({ applications }: ApplicationsProps) {
+  if (loading) return <p className={styles.title}>Загрузка заявок...</p>;
+  if (error) return <p className={styles.title}>Ошибка: {error}</p>;
+
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Заявки</h2>
 
-      {applications && applications.length > 0 ? (
+      {Array.isArray(applications) && applications.length > 0 ? (
         <div className={styles.tableWrapper}>
           <table className={styles.table}>
             <thead>
@@ -27,15 +25,17 @@ export function Applications({ applications }: ApplicationsProps) {
               </tr>
             </thead>
             <tbody>
-              {applications.map((application) => (
-                <tr key={application.id}>
-                  <td>{application.status}</td>
+              {applications.map((app) => (
+                <tr
+                  key={app.id}
+                  onClick={() => navigate(`/applications/${app.id}`)}
+                  className={styles.row}
+                >
+                  <td>{app.status}</td>
+                  <td>{new Date(app.created_at).toLocaleString('ru-RU')}</td>
                   <td>
-                    {new Date(application.created_at).toLocaleString('ru-RU')}
-                  </td>
-                  <td>
-                    {application.completion_date
-                      ? new Date(application.completion_date).toLocaleString('ru-RU')
+                    {app.completion_date
+                      ? new Date(app.completion_date).toLocaleString('ru-RU')
                       : 'Неизвестно'}
                   </td>
                 </tr>
