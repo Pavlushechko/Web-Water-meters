@@ -24,7 +24,7 @@ const App = () => {
           </p>
         </div>
         <img 
-          src="/static/main/images/logo.png" 
+          src="http://localhost:9001/api/v1/buckets/image/objects/download?preview=true&prefix=logo.png&version_id=null" 
           alt="Water Meters Logo" 
           className={styles.logo}
         />

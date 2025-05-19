@@ -29,7 +29,7 @@ DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # добавьте сюда адрес вашего фронтенда
+    "http://localhost:3000"  # добавьте сюда адрес вашего фронтенда
 ]
 # Application definition
 
@@ -156,3 +156,12 @@ STATICFILES_DIRS = [
 
 # CORS_ALLOW_CREDENTIALS = True
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'localhost:3000']
+
+
+# Настройки CORS
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",
+# ]
+
+# CORS_ALLOW_CREDENTIALS = True
+# CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"]
