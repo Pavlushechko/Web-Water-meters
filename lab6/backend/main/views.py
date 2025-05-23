@@ -17,6 +17,7 @@ from .serializers import (
     ServiceCreateSerializer,
     ApplicationSerializer,
     ApplicationServiceSerializer,
+    ApplicationCreateSerializer,
     OwnershipSerializer,
     UserSerializer
 )
@@ -127,6 +128,11 @@ class ApplicationAPIView(APIView):
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
+    
     def get(self, request, *args, **kwargs):
         application_id = kwargs.get('application_id')
         user = request.user
@@ -152,13 +158,15 @@ class ApplicationAPIView(APIView):
 
     def post(self, request, *args, **kwargs):
         data = request.data.copy()
-        data['creator'] = request.user.id  # автоматически устанавливаем создателя
+        data['creator'] = request.user.id
         data['moderator'] = request.user.id
-        serializer = ApplicationSerializer(data=data)
+        serializer = ApplicationCreateSerializer(data=data)
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            application = serializer.save()
+            return Response(ApplicationSerializer(application).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 
 
@@ -235,7 +243,7 @@ class ApplicationDetailAPIView(APIView):
         if not user.is_staff and application.creator != user:
             return Response({"detail": "Недостаточно прав."}, status=status.HTTP_403_FORBIDDEN)
 
-        serializer = ApplicationSerializer(application, data=request.data, partial=True)
+        serializer = ApplicationSerializer(application, data=request.data, partial=True, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)

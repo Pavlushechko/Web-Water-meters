@@ -172,13 +172,19 @@ export function ApplicationDetail() {
       <div style={{ marginTop: 20 }}>
         {isEditing ? (
           <>
-            <button onClick={handleSave} style={{ marginRight: 10 }}>
+            <button onClick={handleSave} className={styles.button} style={{ marginRight: 10 }}>
               Сохранить
             </button>
-            <button onClick={() => setIsEditing(false)}>Отмена</button>
+            <button onClick={() => setIsEditing(false)} className={styles.button}>
+              Отмена
+            </button>
           </>
         ) : (
-          isAdmin && <button onClick={() => setIsEditing(true)}>Редактировать</button>
+          isAdmin && (
+            <button onClick={() => setIsEditing(true)} className={styles.button}>
+              Редактировать
+            </button>
+          )
         )}
       </div>
     </div>

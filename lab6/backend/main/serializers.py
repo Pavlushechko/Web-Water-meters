@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Service, Application, ApplicationService, User, Ownership, UserProfile
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 
 
@@ -121,11 +122,22 @@ class ApplicationSerializer(serializers.ModelSerializer):
         if kwargs.get('context') and kwargs['context'].get('request') and kwargs['context']['request'].method == 'POST':
             self.fields.pop('application_services', None)
         super().__init__(*args, **kwargs)
+    
+    def update(self, instance, validated_data):
+        request = self.context.get('request')
+        if request and request.user:
+            instance.moderator = request.user
+        return super().update(instance, validated_data)
 
 
 
 # serializers.py
+User = get_user_model()
 class ApplicationCreateSerializer(serializers.ModelSerializer):
+    creator = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
+    moderator = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
+
     class Meta:
         model = Application
-        fields = ['id', 'status', 'created_at', 'completion_date']
+        fields = ['id', 'status', 'created_at', 'completion_date', 'creator', 'moderator']
+        read_only_fields = ['id', 'created_at']

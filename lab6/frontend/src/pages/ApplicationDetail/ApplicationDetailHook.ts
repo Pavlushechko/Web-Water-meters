@@ -82,12 +82,12 @@ export function useApplicationDetail(id?: string) {
       const payload = {
         ...editedApplication,
         completion_date:
-          editedApplication.completion_date?.trim() === ''
-            ? null
-            : new Date(editedApplication.completion_date as string).toISOString(),
+          editedApplication.completion_date?.trim()
+            ? new Date(editedApplication.completion_date).toISOString()
+            : null,
         form_date:
-          editedApplication.form_date
-            ? new Date(editedApplication.form_date as string).toISOString()
+          editedApplication.form_date?.trim()
+            ? new Date(editedApplication.form_date).toISOString()
             : undefined,
       };
 
