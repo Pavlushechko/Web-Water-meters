@@ -1,0 +1,30 @@
+{% extends "main/layout.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+    <h1>Заявки</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Статус</th>
+                <th>Дата начала</th>
+                <th>Дата окончания</th>
+            </tr>
+        </thead>
+        <tbody id="requests-body">
+            {% for application in applications %}
+                <tr>
+                    <td>{{ application.creator }}</td>  <!-- Статус заявки -->
+                    <td>{{ application.get_status_display }}</td>  <!-- Статус заявки -->
+                    <td>{{ application.created_at }}</td>  <!-- Дата создания -->
+                    <td>{{ application.completion_date }}</td>  <!-- Дата завершения -->
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <a href="{% url 'service_list' %}" class="detail-back-button">← Назад</a>
+</div>
+{% endblock %}

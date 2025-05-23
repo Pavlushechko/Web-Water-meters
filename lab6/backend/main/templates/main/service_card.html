@@ -1,0 +1,19 @@
+<a href="{% url 'service_detail' service.id %}" class="card-link"> 
+    <div class="card"> 
+        <div class="card-image"> 
+            <img src="{{ service.image }}" alt="Фото дома"> 
+        </div> 
+        <div class="card-info"> 
+            <h3>{{ service.city }}, ул. {{ service.street }}, д. {{ service.house }}, кв. {{ service.apartment }}</h3> 
+            <p><strong>Хозяева:</strong>
+                {% with owners=service.ownership_set.all %}
+                    {% for ownership in owners %}
+                        {{ ownership.user.first_name }} {{ ownership.user.last_name }}{% if ownership.user.patronymic %} {{ ownership.user.patronymic }}{% endif %}{% if not forloop.last %}, {% endif %}
+                    {% empty %}
+                        Нет хозяев
+                    {% endfor %}
+                {% endwith %}
+            </p>
+        </div>
+    </div> 
+</a>

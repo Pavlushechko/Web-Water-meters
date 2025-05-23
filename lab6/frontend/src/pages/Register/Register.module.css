@@ -1,0 +1,133 @@
+/* Register.module.css */
+.register_container {
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.register_container h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.form_group {
+    margin-bottom: 1rem;
+}
+
+.form_group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.form_group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.button_group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.button {
+    flex: 1;
+    padding: 0.75rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #45a049;
+}
+
+.secondary_button {
+    flex: 1;
+    padding: 0.75rem;
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+.secondary_button:hover {
+    background-color: #e0e0e0;
+}
+
+.login_link {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: #666;
+}
+
+.link_button {
+    background: none;
+    border: none;
+    color: #4CAF50;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+    font-size: inherit;
+}
+
+.error {
+    color: #f44336;
+    margin: 1rem 0;
+    padding: 0.5rem;
+    background-color: #ffebee;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.login_link {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.login-button {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0;
+    text-decoration: underline;
+}
+
+.login-button:hover {
+    color: #0056b3;
+}
+
+.back-button {
+    margin-top: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px 20px;
+    background-color: #888;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.back-button:hover {
+    background-color: #555;
+}
