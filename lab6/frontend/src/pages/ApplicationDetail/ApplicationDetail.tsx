@@ -83,25 +83,24 @@ export function ApplicationDetail() {
   const applicationServices = application.application_services;
 
   return (
-    <div>
+    <div className={styles.container}>
       <h2>Заявка #{application.id}</h2>
 
       <p>
         Статус:{' '}
         {isEditing && isAdmin ? (
-        <select
-          name="status"
-          value={editedApplication.status || ''}
-          onChange={handleInputChange}
-          className={styles.statusSelect}
-        >
-          {Object.entries(statusMapping).map(([label, value]) => (
-            <option key={value} value={value}>
-              {label}
-            </option>
-          ))}
-        </select>
-
+          <select
+            name="status"
+            value={editedApplication.status || ''}
+            onChange={handleInputChange}
+            className={styles.statusSelect}
+          >
+            {Object.entries(statusMapping).map(([label, value]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
         ) : (
           application.status
         )}
@@ -132,13 +131,13 @@ export function ApplicationDetail() {
       {applicationServices.length === 0 && <p>Нет связанных услуг</p>}
 
       {applicationServices.map(({ id, service, gvs, hvs }: ApplicationService) => (
-        <div key={id} style={{ marginTop: '20px', borderTop: '1px solid #ccc', paddingTop: '10px' }}>
+        <div key={id} className={styles.serviceBlock}>
           <h3>Услуга #{service.id}</h3>
           {service.image && (
             <img
               src={service.image}
               alt={`Фото услуги ${service.id}`}
-              style={{ maxWidth: '300px', borderRadius: '6px' }}
+              className={styles.serviceImage}
               onError={(e) => { (e.target as HTMLImageElement).src = '/path/to/default-image.jpg'; }}
             />
           )}
@@ -168,25 +167,19 @@ export function ApplicationDetail() {
         </div>
       ))}
 
-      {/* Кнопки управления */}
-      <div style={{ marginTop: 20 }}>
+      <div className={styles.buttonGroup}>
         {isEditing ? (
           <>
-            <button onClick={handleSave} className={styles.button} style={{ marginRight: 10 }}>
-              Сохранить
-            </button>
-            <button onClick={() => setIsEditing(false)} className={styles.button}>
-              Отмена
-            </button>
+            <button onClick={handleSave} className={styles.button}>Сохранить</button>
+            <button onClick={() => setIsEditing(false)} className={styles.button}>Отмена</button>
           </>
         ) : (
           isAdmin && (
-            <button onClick={() => setIsEditing(true)} className={styles.button}>
-              Редактировать
-            </button>
+            <button onClick={() => setIsEditing(true)} className={styles.button}>Редактировать</button>
           )
         )}
       </div>
     </div>
   );
+
 }

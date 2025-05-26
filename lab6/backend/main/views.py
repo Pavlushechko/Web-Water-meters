@@ -149,10 +149,12 @@ class ApplicationAPIView(APIView):
                 return Response({"detail": "Заявка не найдена."}, status=status.HTTP_404_NOT_FOUND)
 
         # Получаем параметры фильтрации
-        status_filter = request.query_params.get('status')
-        start_date_str = request.query_params.get('start_date')
-        end_date_str = request.query_params.get('end_date')
+        created_start_str = request.query_params.get('created_start')
+        created_end_str = request.query_params.get('created_end')
+        completed_start_str = request.query_params.get('completed_start')
+        completed_end_str = request.query_params.get('completed_end')
 
+        status_filter = request.query_params.get('status')
         # Базовый queryset
         if user.is_staff:
             applications = Application.objects.all()
@@ -163,30 +165,38 @@ class ApplicationAPIView(APIView):
         if status_filter:
             applications = applications.filter(status=status_filter.lower())
 
-        # Фильтрация по дате начала
-        if start_date_str:
+        if created_start_str:
             try:
-                start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
-                applications = applications.filter(created_at__date__gte=start_date)
+                created_start = datetime.strptime(created_start_str, '%Y-%m-%d').date()
+                applications = applications.filter(created_at__date__gte=created_start)
             except ValueError:
-                return Response(
-                    {"detail": "Неверный формат начальной даты. Используйте YYYY-MM-DD."},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+                return Response({"detail": "Неверный формат created_start"}, status=400)
 
-        # Фильтрация по дате окончания
-        if end_date_str:
+        if created_end_str:
             try:
-                end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
-                applications = applications.filter(created_at__date__lte=end_date)
+                created_end = datetime.strptime(created_end_str, '%Y-%m-%d').date()
+                applications = applications.filter(created_at__date__lte=created_end)
             except ValueError:
-                return Response(
-                    {"detail": "Неверный формат конечной даты. Используйте YYYY-MM-DD."},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+                return Response({"detail": "Неверный формат created_end"}, status=400)
 
+        if completed_start_str:
+            try:
+                completed_start = datetime.strptime(completed_start_str, '%Y-%m-%d').date()
+                applications = applications.filter(completion_date__date__gte=completed_start)
+            except ValueError:
+                return Response({"detail": "Неверный формат completed_start"}, status=400)
+
+        if completed_end_str:
+            try:
+                completed_end = datetime.strptime(completed_end_str, '%Y-%m-%d').date()
+                applications = applications.filter(completion_date__date__lte=completed_end)
+            except ValueError:
+                return Response({"detail": "Неверный формат completed_end"}, status=400)
+
+        # Финальный возврат — уже после всех фильтров
         serializer = ApplicationSerializer(applications.order_by('-created_at'), many=True)
         return Response(serializer.data)
+
 
     def post(self, request, *args, **kwargs):
         data = request.data.copy()

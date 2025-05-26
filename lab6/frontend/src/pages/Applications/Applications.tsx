@@ -37,26 +37,50 @@ export function Applications() {
           </select>
         </div>
 
-        <div className={styles.filterGroup}>
-          <label htmlFor="startDate">С:</label>
+      <div className={styles.filterGroup}>
+        <label>Дата создания:</label>
+        <div>
+          <label htmlFor="createdStart">С:</label>
           <input
             type="date"
-            id="startDate"
-            onChange={(e) => handleDateChange('startDate', e.target.value)}
-            value={filters.startDate || ''}
+            id="createdStart"
+            onChange={(e) => handleDateChange('createdStart', e.target.value)}
+            value={filters.createdStart || ''}
           />
         </div>
-
-        <div className={styles.filterGroup}>
-          <label htmlFor="endDate">По:</label>
+        <div>
+          <label htmlFor="createdEnd">По:</label>
           <input
             type="date"
-            id="endDate"
-            onChange={(e) => handleDateChange('endDate', e.target.value)}
-            value={filters.endDate || ''}
+            id="createdEnd"
+            onChange={(e) => handleDateChange('createdEnd', e.target.value)}
+            value={filters.createdEnd || ''}
           />
         </div>
       </div>
+
+      <div className={styles.filterGroup}>
+        <label>Дата окончания:</label>
+        <div>
+          <label htmlFor="completedStart">С:</label>
+          <input
+            type="date"
+            id="completedStart"
+            onChange={(e) => handleDateChange('completedStart', e.target.value)}
+            value={filters.completedStart || ''}
+          />
+        </div>
+        <div>
+          <label htmlFor="completedEnd">По:</label>
+          <input
+            type="date"
+            id="completedEnd"
+            onChange={(e) => handleDateChange('completedEnd', e.target.value)}
+            value={filters.completedEnd || ''}
+          />
+        </div>
+      </div>
+    </div>
 
 
       {Array.isArray(applications) && applications.length > 0 ? (

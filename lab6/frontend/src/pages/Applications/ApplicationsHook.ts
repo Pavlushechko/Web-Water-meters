@@ -3,17 +3,22 @@ import { useEffect, useState, useCallback } from 'react';
 import axiosClient from '../../Clients';
 import { isAxiosError } from 'axios';
 
-export interface Application {
-  id: number | string;
-  status: string;
-  created_at: string;
-  completion_date?: string | null;
+export interface ApplicationFilters {
+  createdStart?: string;
+  createdEnd?: string;
+  completedStart?: string;
+  completedEnd?: string;
+  status?: string;
 }
 
-export interface ApplicationFilters {
-  status?: string;
-  startDate?: string;
-  endDate?: string;
+export interface Application {
+  id: number;
+  title: string;
+  description?: string;
+  status: string;
+  created_at: string;
+  completion_date?: string;
+  [key: string]: any; // если могут быть другие поля
 }
 
 export const statusMapping: Record<string, string> = {
@@ -51,12 +56,13 @@ export function useApplications() {
     }));
   }, []);
 
-  const handleDateChange = useCallback((type: 'startDate' | 'endDate', value: string) => {
+  const handleDateChange = useCallback((field: keyof ApplicationFilters, value: string) => {
     setFilters(prev => ({
       ...prev,
-      [type]: value ? formatDateForAPI(value) : undefined
+      [field]: value ? formatDateForAPI(value) : undefined
     }));
   }, []);
+
 
   useEffect(() => {
     const fetchApplications = async () => {
@@ -65,9 +71,11 @@ export function useApplications() {
         setError(null);
         
         const params = new URLSearchParams();
-        if (filters.status) params.append('status', filters.status);
-        if (filters.startDate) params.append('start_date', filters.startDate);
-        if (filters.endDate) params.append('end_date', filters.endDate);
+        if (filters.createdStart) params.append('created_start', filters.createdStart);
+        if (filters.createdEnd) params.append('created_end', filters.createdEnd);
+        if (filters.completedStart) params.append('completed_start', filters.completedStart);
+        if (filters.completedEnd) params.append('completed_end', filters.completedEnd);
+
 
         const response = await axiosClient.get('/api/applications/', { params });
         
