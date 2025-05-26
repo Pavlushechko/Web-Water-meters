@@ -1,16 +1,22 @@
 // hooks/useApplications.ts
-import { useEffect, useState } from 'react';
-import axiosClient from '../../Clients'; 
+import { useEffect, useState, useCallback } from 'react';
+import axiosClient from '../../Clients';
 import { isAxiosError } from 'axios';
 
-export type Application = {
+export interface Application {
   id: number | string;
   status: string;
-  created_at: string | Date;
-  completion_date?: string | Date | null;
-};
+  created_at: string;
+  completion_date?: string | null;
+}
 
-export const statusMapping: { [key: string]: string } = {
+export interface ApplicationFilters {
+  status?: string;
+  startDate?: string;
+  endDate?: string;
+}
+
+export const statusMapping: Record<string, string> = {
   "Черновик": "draft",
   "Удалён": "deleted",
   "Сформирован": "formatted",
@@ -18,17 +24,39 @@ export const statusMapping: { [key: string]: string } = {
   "Отклонён": "rejected"
 };
 
+// Создаем обратное отображение для перевода с английского на русский
+const reverseStatusMapping = Object.fromEntries(
+  Object.entries(statusMapping).map(([russian, english]) => [english, russian])
+);
 
 export function useApplications() {
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  // Функция для преобразования английского статуса в русский
-  const getRussianStatus = (englishStatus: string) => {
-    return Object.entries(statusMapping).find(
-      ([russian, english]) => english === englishStatus
-    )?.[0] || englishStatus; // Если не найдено, возвращаем как есть
+  const [filters, setFilters] = useState<ApplicationFilters>({});
+
+  // Оптимизированная версия функции перевода статуса
+  const getRussianStatus = useCallback((englishStatus: string) => {
+    return reverseStatusMapping[englishStatus] || englishStatus;
+  }, []);
+
+  const formatDateForAPI = (dateString: string): string => {
+    return dateString;
   };
+
+  const handleStatusChange = useCallback((value: string) => {
+    setFilters(prev => ({
+      ...prev,
+      status: value || undefined
+    }));
+  }, []);
+
+  const handleDateChange = useCallback((type: 'startDate' | 'endDate', value: string) => {
+    setFilters(prev => ({
+      ...prev,
+      [type]: value ? formatDateForAPI(value) : undefined
+    }));
+  }, []);
 
   useEffect(() => {
     const fetchApplications = async () => {
@@ -36,15 +64,19 @@ export function useApplications() {
         setLoading(true);
         setError(null);
         
-        const response = await axiosClient.get('/api/applications/');
+        const params = new URLSearchParams();
+        if (filters.status) params.append('status', filters.status);
+        if (filters.startDate) params.append('start_date', filters.startDate);
+        if (filters.endDate) params.append('end_date', filters.endDate);
+
+        const response = await axiosClient.get('/api/applications/', { params });
         
-        // Преобразуем статусы в русские названия
+        // Используем getRussianStatus для перевода статусов
         const dataWithTranslatedStatuses = response.data.map((app: Application) => ({
           ...app,
-          status: getRussianStatus(app.status) // Преобразуем здесь
+          status: getRussianStatus(app.status)
         }));
 
-        console.log('Заявки получены:', dataWithTranslatedStatuses);
         setApplications(dataWithTranslatedStatuses);
       } catch (err) {
         if (isAxiosError(err)) {
@@ -52,25 +84,25 @@ export function useApplications() {
                             err.response?.data?.message || 
                             'Ошибка при загрузке заявок';
           setError(errorMessage);
-        } else if (err instanceof Error) {
-          setError(err.message);
         } else {
           setError('Неизвестная ошибка');
         }
-        console.error('Ошибка загрузки заявок:', err);
       } finally {
         setLoading(false);
       }
     };
 
     fetchApplications();
-  }, []);
+  }, [filters, getRussianStatus]);
 
-  // Экспортируем функцию преобразования статусов для использования в других компонентах
   return {
     applications,
     loading,
     error,
-    statusMapping
+    statusMapping,
+    filters,
+    handleStatusChange,
+    handleDateChange,
+    getRussianStatus // Экспортируем функцию, если она нужна в компоненте
   };
 }

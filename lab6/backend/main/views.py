@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from django.utils import timezone
 from django.core.cache import cache
+from datetime import datetime, timedelta
 import json
 
 from .models import Service, Application, ApplicationService, Ownership
@@ -147,14 +148,45 @@ class ApplicationAPIView(APIView):
             except Application.DoesNotExist:
                 return Response({"detail": "Заявка не найдена."}, status=status.HTTP_404_NOT_FOUND)
 
+        # Получаем параметры фильтрации
+        status_filter = request.query_params.get('status')
+        start_date_str = request.query_params.get('start_date')
+        end_date_str = request.query_params.get('end_date')
+
+        # Базовый queryset
         if user.is_staff:
             applications = Application.objects.all()
         else:
             applications = Application.objects.filter(creator=user)
 
-        serializer = ApplicationSerializer(applications, many=True)
-        # print(serializer.data)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        # Фильтрация по статусу
+        if status_filter:
+            applications = applications.filter(status=status_filter.lower())
+
+        # Фильтрация по дате начала
+        if start_date_str:
+            try:
+                start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+                applications = applications.filter(created_at__date__gte=start_date)
+            except ValueError:
+                return Response(
+                    {"detail": "Неверный формат начальной даты. Используйте YYYY-MM-DD."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+        # Фильтрация по дате окончания
+        if end_date_str:
+            try:
+                end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+                applications = applications.filter(created_at__date__lte=end_date)
+            except ValueError:
+                return Response(
+                    {"detail": "Неверный формат конечной даты. Используйте YYYY-MM-DD."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+        serializer = ApplicationSerializer(applications.order_by('-created_at'), many=True)
+        return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
         data = request.data.copy()
