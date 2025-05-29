@@ -69,17 +69,16 @@ export function useApplications() {
       try {
         setLoading(true);
         setError(null);
-        
+
         const params = new URLSearchParams();
         if (filters.createdStart) params.append('created_start', filters.createdStart);
         if (filters.createdEnd) params.append('created_end', filters.createdEnd);
         if (filters.completedStart) params.append('completed_start', filters.completedStart);
         if (filters.completedEnd) params.append('completed_end', filters.completedEnd);
-
+        if (filters.status) params.append('status', filters.status); // <-- добавлено
 
         const response = await axiosClient.get('/api/applications/', { params });
-        
-        // Используем getRussianStatus для перевода статусов
+
         const dataWithTranslatedStatuses = response.data.map((app: Application) => ({
           ...app,
           status: getRussianStatus(app.status)
@@ -88,9 +87,9 @@ export function useApplications() {
         setApplications(dataWithTranslatedStatuses);
       } catch (err) {
         if (isAxiosError(err)) {
-          const errorMessage = err.response?.data?.detail || 
-                            err.response?.data?.message || 
-                            'Ошибка при загрузке заявок';
+          const errorMessage = err.response?.data?.detail ||
+            err.response?.data?.message ||
+            'Ошибка при загрузке заявок';
           setError(errorMessage);
         } else {
           setError('Неизвестная ошибка');
@@ -102,6 +101,7 @@ export function useApplications() {
 
     fetchApplications();
   }, [filters, getRussianStatus]);
+
 
   return {
     applications,

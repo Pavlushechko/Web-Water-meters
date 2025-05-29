@@ -110,6 +110,21 @@
       margin: 0;
   }
   
+  .detailCartButton {
+    background-color: #630ae0;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: none; /* Убираем подчёркивание */
+  }
+
+  .detailCartButton:hover {
+    background-color: #0ba4e6;
+  }
+
   .detailSubmitButton {
     background-color: #007BFF;
     color: white;

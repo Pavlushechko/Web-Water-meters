@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import styles from './ServiceDetail.module.css';
 import { ServiceDetailHook } from './ServiceDetailHook';
 
@@ -24,12 +24,32 @@ export type Service = {
   owners: Owner[];
 };
 
+export type CartItem = {
+  id: number | string;
+  city: string;
+  street: string;
+  house: string;
+  apartment: string;
+  gvs?: string;
+  hvs?: string;
+  owners: string;
+  image: string;
+};
+
 export function ServiceDetail() {
   const { id } = useParams<{ id: string }>();
   const [gvs, setGvs] = useState('');
   const [hvs, setHvs] = useState('');
+  const navigate = useNavigate();
 
-  const { service, error, handleSubmit, submitted } = ServiceDetailHook(gvs, hvs);
+  const {
+    service,
+    error,
+    handleSubmit,
+    submitted,
+    addToCart 
+  } = ServiceDetailHook(gvs, hvs);
+
 
 
   if (error) {
@@ -113,10 +133,38 @@ export function ServiceDetail() {
               Заявка отправлена! Перейти к услугам
             </Link>
           ) : (
-            <button type="submit" className={styles.detailSubmitButton}>
-              Отправить заявку
-            </button>
+            <>
+              <button
+                type="button"
+                className={styles.detailCartButton}
+                onClick={() => {
+                  addToCart(
+                    service.id,
+                    service.city,
+                    service.house,
+                    service.street,
+                    gvs,
+                    service.apartment,
+                    hvs,
+                    owners
+                  );
+                  navigate('/services');
+                }}
+              >
+                Добавить в корзину
+              </button>
+
+
+              <button
+                type="submit"
+                className={styles.detailSubmitButton}
+              >
+                Отправить заявку
+              </button>
+            </>
           )}
+
+
         </div>
       </form>
 

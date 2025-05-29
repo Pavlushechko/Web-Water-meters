@@ -65,3 +65,14 @@
     background-color: #0056b3;
 }
 
+.cart {
+    position: absolute;
+    width: 96px;
+    right: 20px;    /* Приклеивает элемент к правому краю */
+    top: 50px;
+    cursor: pointer;
+}
+
+.cart:hover {
+    filter: brightness(1.3);
+}
