@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useApplicationDetail } from './ApplicationDetailHook';
 import type { ChangeEvent } from 'react';
 import styles from './ApplicationDetail.module.css';
@@ -84,6 +84,12 @@ export function ApplicationDetail() {
 
   return (
     <div className={styles.container}>
+      <p className={styles.pathway}>
+        <Link to="/applications" className={styles.linkOnly}>
+          /applications
+        </Link>
+        /{id}
+      </p>
       <h2>Заявка #{application.id}</h2>
 
       <p>

@@ -72,7 +72,13 @@ export function ServiceDetail() {
 
   return (
     <div className={styles.card}>
-      <p className={styles.pathway}>/services/{id}</p>
+      <p className={styles.pathway}>
+        <Link to="/services" className={styles.linkOnly}>
+          /services
+        </Link>
+        /{id}
+      </p>
+
       <h2 className={styles.title}>Информация о квартире</h2>
 
       <div className={styles.imageBlock}>

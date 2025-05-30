@@ -111,7 +111,7 @@ export function ServiceDetailHook(gvs: string = '', hvs: string = '') {
     try {
       setSubmitted(false);
       // 1. Создаем заявку
-      const applicationResponse = await axiosClient.post('/api/applications/', {});
+      const applicationResponse = await axiosClient.post('/api/applications/', {status: 'formatted'});
       const applicationId = applicationResponse.data.id;
       const gvsInt = parseInt(gvs) || 0;
       const hvsInt = parseInt(hvs) || 0;
