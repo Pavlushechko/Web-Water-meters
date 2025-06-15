@@ -75,7 +75,6 @@ export function ServiceListHook(searchQuery: string = '') {
         setIsLoading(true);
         setError(null);
 
-        // Имитация загрузки с сервера
         const response = await axiosClient.get("/api/services/", {
           params: {
             page: page,

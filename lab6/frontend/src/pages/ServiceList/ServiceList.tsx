@@ -6,28 +6,6 @@ import styles from "./ServiceList.module.css";
 import CartIcon from "../../assets/CartIcon.png";
 import { Cart } from '../../moduls/Cart/Cart';
 
-type User = {
-  first_name: string;
-  last_name: string;
-  patronymic?: string | null;
-};
-
-type Ownership = {
-  user: User;
-};
-
-export type Service = {
-  id: number | string;
-  city: string;
-  street: string;
-  house: string;
-  apartment: string;
-  image: string;
-  ownerships: Ownership[];
-  name?: string;
-  description?: string;
-};
-
 export function ServiceList() {
   const [inputValue, setInputValue] = useState('');
   const [search, setSearch] = useState('');
