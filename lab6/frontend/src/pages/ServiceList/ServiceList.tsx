@@ -30,7 +30,7 @@ export type Service = {
 
 export function ServiceList() {
   const [inputValue, setInputValue] = useState('');
-  // const [search, setSearch] = useState('');
+  const [search, setSearch] = useState('');
   const [cartItems, setCartItems] = useState<any[]>(() => {
     try {
       const saved = localStorage.getItem('cart');
@@ -41,11 +41,12 @@ export function ServiceList() {
   });
 
 
-  const { services, loadMore, hasMore, isLoading, error } = ServiceListHook();
+  const { services, loadMore, hasMore, isLoading, error } = ServiceListHook(search);
   const { toggleCartVisibility, isCartVisible } = ServiceDetailHook();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setSearch(inputValue);
   };
 
   if (error) return <div>Ошибка: {error.message}</div>;
